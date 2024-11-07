@@ -1,5 +1,4 @@
 import requests
-from utils import kelvin_to_celsius  # 導入轉換絕對溫度到攝氏的函數
 LINE_URL = 'https://notify-api.line.me/api/notify'
 
 class LineNotification:
@@ -11,13 +10,12 @@ class LineNotification:
         假設天氣資料是一個 dictionary 格式，並包含需要的資訊。
         """
         status = weather_data.get('status', '無法取得天氣狀態')
-        temp_k = weather_data.get('temperature', {}).get('temp', 273.15)  # 絕對溫度預設為 273.15K
-        temp_c = kelvin_to_celsius(temp_k)  # 使用 utils 的轉換函數
+        temperature = weather_data.get('temperature', {}).get('temp', '無法取得溫度')  # 直接使用攝氏溫度
         humidity = weather_data.get('humidity', '無法取得濕度')
         wind_speed = weather_data.get('wind', {}).get('speed', '無法取得風速')
 
         # 組合訊息
-        message = f"天氣狀態: {status}\n溫度: {temp_c:.2f}°C\n濕度: {humidity}%\n風速: {wind_speed} m/s"
+        message = f"天氣狀態: {status}\n溫度: {temperature:.2f}°C\n濕度: {humidity}%\n風速: {wind_speed} m/s"
         return message
 
     def notify(self, weather_data):
